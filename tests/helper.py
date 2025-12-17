@@ -3,7 +3,7 @@ from tempfile import NamedTemporaryFile
 
 import xml.etree.ElementTree as et
 
-from konwdocs import KONWXML
+from konwdocs import konwertujdok
 
 
 def _wez_test_plik(plik: str) -> str:
@@ -13,11 +13,7 @@ def _wez_test_plik(plik: str) -> str:
 
 def konwertuj_dok(plik: str, d: dict) -> str:
     plik_path = _wez_test_plik(plik)
-    tree = et.parse(plik_path)
-    root = tree.getroot()
-    K = KONWXML(root=root)
-    K.replace_all(d=d)
-    tfile = NamedTemporaryFile()
-    tree.write(tfile.name)
-    xml = tfile.read()
-    return xml.decode()
+    with NamedTemporaryFile() as tfile:
+        konwertujdok(sou=plik_path, dest=tfile.name, d=d)
+        xml = tfile.read()
+        return xml.decode()
