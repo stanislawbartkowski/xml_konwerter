@@ -3,7 +3,7 @@ requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools.package-dir]
-"konwdocs" = "konwdocs"
+"xml_konwerter" = "xml_konwerter"
 
 [project]
 name = "xml_konwerter"

@@ -1,6 +1,6 @@
 import xml.etree.ElementTree as et
 
-from konwdocs import KONWXML
+from xml_konwerter import KONWXML
 
 
 def konwertujdok(sou: str, dest: str, d: dict):

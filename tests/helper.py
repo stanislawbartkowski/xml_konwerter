@@ -3,7 +3,7 @@ from tempfile import NamedTemporaryFile
 
 import xml.etree.ElementTree as et
 
-from konwdocs import konwertujdok
+from xml_konwerter import konwertujdok
 
 
 def _wez_test_plik(plik: str) -> str:
