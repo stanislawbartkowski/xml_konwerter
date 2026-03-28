@@ -1,15 +1,26 @@
-[build-system]
-requires = ["setuptools"]
-build-backend = "setuptools.build_meta"
-
-[tool.setuptools.package-dir]
-"xml_konwerter" = "xml_konwerter"
-
-[project]
-name = "xml_konwerter"
-version = "1.0.0"
-requires-python = ">=3.10"
-authors = [
-  {name = "Stanisław Bartkowski", email = "stanislawbartkowski@gmail.com"},
-]
-readme = "README.md"
+  [build-system]                                                                                                                                                                                                                                           
+  requires = ["setuptools>=61"]
+  build-backend = "setuptools.build_meta"                                                                                                                                                                                                                    
+                                          
+  [tool.setuptools.packages.find]                                                                                                                                                                                                                            
+  where = ["."]                                                                                                                                                                                                                                              
+   
+  [project]                                                                                                                                                                                                                                                  
+  name = "xml_konwerter"                                                                                                                                                                                                                                   
+  version = "0.0.1"                           
+  description = "Lightweight XML template processor with variable substitution"
+  readme = "README.md"
+  license = { file = "LICENSE" }                                                                                                                                                                                                                             
+  requires-python = ">=3.10"                  
+  authors = [                                                                                                                                                                                                                                                
+    { name = "Stanisław Bartkowski", email = "stanislawbartkowski@gmail.com" }                                                                                                                                                                             
+  ]                                                                                                                                                                                                                                                          
+  keywords = ["xml", "template", "invoice", "ksef"]
+  classifiers = [                                                                                                                                                                                                                                            
+    "Programming Language :: Python :: 3",                                                                                                                                                                                                                   
+    "License :: OSI Approved :: MIT License", 
+    "Operating System :: OS Independent",                                                                                                                                                                                                                    
+  ]                                                                                                                                                                                                                                                        
+                                                                                                                                                                                                                                                             
+  [project.urls]
+  Homepage = "https://github.com/stanislawbartkowski/xml_konwerter"  
