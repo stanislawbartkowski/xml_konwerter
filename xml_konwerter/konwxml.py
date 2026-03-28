@@ -28,7 +28,6 @@ class KONWXML:
             # teraz zamien
             for zm in zmset:
                 subst = "{{" + zm + "}}"
-                print(zm, d[zm])
                 te = te.replace(subst, d[zm])
 
             elem.text = te
