@@ -1,2 +1,4 @@
 /.venv
 *.pyc
+dist/
+xml_konwerter.egg-info/

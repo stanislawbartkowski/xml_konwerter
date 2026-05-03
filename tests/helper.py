@@ -1,8 +1,6 @@
 import os
 from tempfile import NamedTemporaryFile
 
-import xml.etree.ElementTree as et
-
 from xml_konwerter import konwertujdok
 
 
@@ -11,9 +9,9 @@ def _wez_test_plik(plik: str) -> str:
     return p
 
 
-def konwertuj_dok(plik: str, d: dict) -> str:
+def konwertuj_dok(plik: str, d: dict, html_linia: str = None, k_lista: str = None) -> str:
     plik_path = _wez_test_plik(plik)
     with NamedTemporaryFile() as tfile:
-        konwertujdok(sou=plik_path, dest=tfile.name, d=d)
+        konwertujdok(sou=plik_path, dest=tfile.name, d=d, htmllinia=html_linia, kluczlista=k_lista)
         xml = tfile.read()
         return xml.decode()

@@ -1,13 +1,13 @@
 from copy import deepcopy
+from xml.etree.ElementTree import Element
 
 
 class KONWXML:
+    TABLE_TAG = "table"
 
-    def __init__(self, root):
-        self._root = root
-
-    def _replace_text(self, d:dict):
-        for elem in self._root.iter():
+    @classmethod
+    def replace_text(cls, root: Element, d: dict):
+        for elem in root.iter():
             te = elem.text
             if te is None:
                 continue
@@ -18,12 +18,12 @@ class KONWXML:
                 beg = te.find("{{", spos)
                 end = te.find("}}", spos)
                 if beg >= 0 and end > 0:
-                    varia = te[beg+2:end]
+                    varia = te[beg + 2 : end]
                     if varia in d:
                         zmset.append(varia)
                 else:
                     break
-                spos = end+2
+                spos = end + 2
 
             # teraz zamien
             for zm in zmset:
@@ -32,14 +32,25 @@ class KONWXML:
 
             elem.text = te
 
-    def _replace_all(self, prefix: str, d: dict, alista: dict):
-        self._replace_text(d)
+    @classmethod
+    def replace_all(cls, root: Element, prefix: str, d: dict, alista: dict):
+        """
+        root
+        prefix:str Wyrożnik dla LINIE w templace
+        d Dictionary z wartościami
+        alist Dictionary dla linii
+        """
+        cls.replace_text(root, d)
 
-    def replace_all(self, d: dict):
-        self._replace_all(prefix="", d=d, alista=d)
-
-    def _replace_linie(self, d, alista, plist, klista):
-        root = self._root
+    @classmethod
+    def replace_linie(cls, root: Element, d: dict, alista: dict[str, list], plist: str, klista: str):
+        """ "
+        root
+        d Dictionary z wartościami dla wypełnianie
+        alista Dictionary zawierajce linie do wypelnienia
+        plist Wyrożnik dla linia {{LINIE + plist}}
+        klist Klucz do alist
+        """
         taglist = "{{LINIE" + plist + "}}"
         lte = None
         notable = 0
@@ -48,7 +59,7 @@ class KONWXML:
         # że nastepny table jest tym szukanym
         for elem in root.iter():
             te = elem.text
-            if elem.tag == "table":
+            if elem.tag == cls.TABLE_TAG:
                 notable += 1
             if te is None:
                 continue
@@ -81,7 +92,7 @@ class KONWXML:
             trc = deepcopy(tr)
             # _replace_text(trc, e)
             # tutaj rekurencyjnie podmnieniaj zawartość tabeli
-            self._replace_all(trc, plist, d | e, e)
+            cls.replace_all(trc, plist, d | e, e)
             if insert == -1:
                 tablepar.append(trc)
             else:
