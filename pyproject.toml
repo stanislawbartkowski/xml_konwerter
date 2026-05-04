@@ -7,7 +7,7 @@
    
   [project]                                                                                                                                                                                                                                                  
   name = "xml_konwerter"                                                                                                                                                                                                                                   
-  version = "1.1.0"                           
+  version = "1.1.1"                           
   description = "Lightweight XML template processor with variable substitution"
   readme = "README.md"
   license = { file = "LICENSE" }                                                                                                                                                                                                                             
@@ -23,4 +23,16 @@
   ]                                                                                                                                                                                                                                                        
                                                                                                                                                                                                                                                              
   [project.urls]
-  Homepage = "https://github.com/stanislawbartkowski/xml_konwerter"  
+  Homepage = "https://github.com/stanislawbartkowski/xml_konwerter"
+
+[project.optional-dependencies]
+dev = ["ruff"]
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]
+
+[tool.ruff.format]
+quote-style = "double"

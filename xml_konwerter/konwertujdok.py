@@ -3,9 +3,10 @@ import xml.etree.ElementTree as et
 from xml_konwerter import KONWXML
 
 
-def konwertujdok(sou: str, dest: str, d: dict):
+def konwertujdok(sou: str, dest: str, d: dict, alist: dict = None, htmlkeypairing: list[tuple[str, str]] = []):
+    alist = alist or d
     tree = et.parse(sou)
     root = tree.getroot()
-    K = KONWXML(root=root)
-    K.replace_all(d=d)
+    K = KONWXML()
+    K.replace_all(root, d, alist, prefix="", htmlkeypairing=htmlkeypairing)
     tree.write(dest)
