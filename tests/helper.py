@@ -9,9 +9,22 @@ def _wez_test_plik(plik: str) -> str:
     return p
 
 
-def konwertuj_dok(plik: str, d: dict, html_linia: str = None, k_lista: str = None) -> str:
+def konwertuj_dok(
+    plik: str,
+    d: dict,
+    alist: dict = None,
+    html_linia: str = None,
+    k_lista: str = None,
+    html_linia1: str = None,
+    k_lista1: str = None,
+) -> str:
     plik_path = _wez_test_plik(plik)
+    htmlkeypairing = []
+    if html_linia is not None:
+        htmlkeypairing.append((html_linia, k_lista))
+    if html_linia1 is not None:
+        htmlkeypairing.append((html_linia1, k_lista1))
     with NamedTemporaryFile() as tfile:
-        konwertujdok(sou=plik_path, dest=tfile.name, d=d, htmllinia=html_linia, kluczlista=k_lista)
+        konwertujdok(sou=plik_path, dest=tfile.name, d=d, alist=alist, htmlkeypairing=htmlkeypairing)
         xml = tfile.read()
         return xml.decode()

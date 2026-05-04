@@ -1,0 +1,26 @@
+<Faktura>
+<Id> {{ID}}</Id>
+<p>{{LINIE}}</p>
+<table>
+<tr>SUPER NAGŁÓWEK</tr>
+<tr>{{NUMER}}</tr>
+</table>
+
+<p>{{LINIE1}}</p>
+<table>
+<tr>
+
+ <p>{{LINIE1}}</p>
+ <table>
+   <tr> {{OPIS1}} {{SUMA1}} </tr>
+ </table>
+
+ <p>{{LINIE11}}</p>
+ <table>
+   <tr> {{OPISSUMA}} {{DRUGASUMA}} </tr>
+ </table>
+
+</tr>
+</table>
+
+</Faktura>

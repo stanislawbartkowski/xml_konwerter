@@ -33,25 +33,25 @@ class KONWXML:
             elem.text = te
 
     @classmethod
-    def replace_all(cls, root: Element, prefix: str, d: dict, alista: dict):
-        """
-        root
-        prefix:str Wyrożnik dla LINIE w templace
-        d Dictionary z wartościami
-        alist Dictionary dla linii
-        """
+    def replace_all(
+        cls, root: Element, d: dict, alista: dict[str, list], prefix: str, htmlkeypairing: list[tuple[str, str]] = []
+    ):
         cls.replace_text(root, d)
+        prefix = prefix or ""
+        for htmllista, keylista in htmlkeypairing:
+            cls.replace_linie(root, d, alista, prefix + htmllista, keylista, htmlkeypairing)
 
     @classmethod
-    def replace_linie(cls, root: Element, d: dict, alista: dict[str, list], plist: str, klista: str):
-        """ "
-        root
-        d Dictionary z wartościami dla wypełnianie
-        alista Dictionary zawierajce linie do wypelnienia
-        plist Wyrożnik dla linia {{LINIE + plist}}
-        klist Klucz do alist
-        """
-        taglist = "{{LINIE" + plist + "}}"
+    def replace_linie(
+        cls,
+        root: Element,
+        d: dict,
+        alista: dict[str, list],
+        htmllista: str,
+        keylista: str,
+        htmlkeypairing: list[tuple[str, str]],
+    ):
+        taglist = "{{LINIE" + htmllista + "}}"
         lte = None
         notable = 0
         # tutaj wyszukuj odpowiedniej tabeli oznaczone {{LINIE...}}
@@ -81,7 +81,7 @@ class KONWXML:
         tr = trlist[0] if len(trlist) == 1 else trlist[1]
         insert = -1 if len(trlist) <= 2 else 1
         # usun iterowalny element (i potem będzie powielny w pętli)
-        lista = alista.get(klista)
+        lista = alista.get(keylista)
         if lista is None:
             for t in trlist:
                 tablepar.remove(t)
@@ -92,7 +92,7 @@ class KONWXML:
             trc = deepcopy(tr)
             # _replace_text(trc, e)
             # tutaj rekurencyjnie podmnieniaj zawartość tabeli
-            cls.replace_all(trc, plist, d | e, e)
+            cls.replace_all(trc, d | e, e, htmllista, htmlkeypairing)
             if insert == -1:
                 tablepar.append(trc)
             else:
