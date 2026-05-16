@@ -1,12 +1,12 @@
-import xml.etree.ElementTree as et
+from lxml import etree
 
-from xml_konwerter import KONWXML
+from .konwxml import KONWXML
 
 
-def konwertujdok(sou: str, dest: str, d: dict, alist: dict = None, htmlkeypairing: list[tuple[str, str]] = []):
+def konwertujdok(sou: str, dest: str, d: dict, alist: dict = None, htmlkeypairing: list[tuple[str, str]] = [], KO=KONWXML):
     alist = alist or d
-    tree = et.parse(sou)
+    tree = etree.parse(sou)
     root = tree.getroot()
-    K = KONWXML()
+    K = KO()
     K.replace_all(root, d, alist, prefix="", htmlkeypairing=htmlkeypairing)
     tree.write(dest)

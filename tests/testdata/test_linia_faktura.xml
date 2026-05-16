@@ -1,0 +1,7 @@
+<Faktura>
+<Id> {{ID}} </Id>
+<p>{{LINIE}}</p>
+<fakturalinie>
+<wiersze>{{NUMER}}/</wiersze>
+</fakturalinie>
+</Faktura>
