@@ -1,6 +1,6 @@
 import pytest
-
 from helper import FAKTURA, FAKTURABEZ, konwertuj_dok
+
 from xml_konwerter import KONWXML
 
 PARAMS = pytest.mark.parametrize(
@@ -129,7 +129,8 @@ class TestKonwerter:
 
     @PARAMS
     def test_zamien_linie_naglowek_podglowek(self, zamien, KO, table, tr, expect_table):
-        self._test_zamien_linie_naglowek(self.PRZYKLAD_LINIE_NAGL_PODL, zamien, KO, table, tr, expect_table, "SUPER POD")
+        self._test_zamien_linie_naglowek(
+            self.PRZYKLAD_LINIE_NAGL_PODL, zamien, KO, table, tr, expect_table, "SUPER POD")
 
     @PARAMS
     def test_zamien_linie2(self, zamien, KO, table, tr, expect_table):

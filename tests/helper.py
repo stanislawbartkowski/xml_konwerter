@@ -1,7 +1,7 @@
 import os
 from tempfile import NamedTemporaryFile
 
-from xml_konwerter import konwertujdok, KONWXML
+from xml_konwerter import KONWXML, konwertujdok
 
 
 def _wez_test_plik(plik: str) -> str:
