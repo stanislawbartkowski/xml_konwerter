@@ -7,7 +7,7 @@
    
   [project]                                                                                                                                                                                                                                                  
   name = "xml_konwerter"                                                                                                                                                                                                                                   
-  version = "1.2.0"                           
+  version = "1.2.1"                           
   description = "Lightweight XML template processor with variable substitution"
   readme = "README.md"
   license = { file = "LICENSE" }                                                                                                                                                                                                                             
