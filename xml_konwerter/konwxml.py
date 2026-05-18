@@ -1,4 +1,5 @@
 from copy import deepcopy
+from typing import Optional
 
 from lxml.etree import _Element as Element
 
@@ -37,14 +38,17 @@ class KONWXML:
 
     @classmethod
     def replace_all(
-        cls, root: Element, d: dict, alista: dict[str, list], prefix: str, htmlkeypairing: list[tuple[str, str]] = []
+        cls, root: Element, d: dict, alista: dict[str, list], prefix: str,
+        htmlkeypairing: list[tuple[str, str]] = [],
+        ns: Optional[str] = None,
     ):
+        ns = ns if ns is not None else root.nsmap.get(None)
         cls._replace_text(root, d)
         prefix = prefix or ""
         tags_to_remove = []
         for htmllista, keylista in htmlkeypairing:
             t = cls._replace_linie(
-                root, d, alista, prefix + htmllista, keylista, htmlkeypairing)
+                root, d, alista, prefix + htmllista, keylista, htmlkeypairing, ns)
             tags_to_remove += t
 
         if cls.REMNOVE_TABLE_TAG:
@@ -76,7 +80,13 @@ class KONWXML:
         htmllista: str,
         keylista: str,
         htmlkeypairing: list[tuple[str, str]],
+        ns: Optional[str] = None,
     ) -> list[Element]:
+        ns = ns if ns is not None else root.nsmap.get(None)
+        table_tag = f"{{{ns}}}{cls.TABLE_TAG}" if ns else cls.TABLE_TAG
+        tr_tag = f"{{{ns}}}{cls.TR_TAG}" if ns else cls.TR_TAG
+        p_tag = f"{{{ns}}}p" if ns else "p"
+
         taglist = "{{LINIE" + htmllista + "}}"
         tag_to_remove = []
         lte = None
@@ -86,7 +96,7 @@ class KONWXML:
         # że nastepny table jest tym szukanym
         for elem in root.iter():
             te = elem.text
-            if elem.tag == cls.TABLE_TAG:
+            if elem.tag == table_tag:
                 notable += 1
             if te is None:
                 continue
@@ -96,15 +106,15 @@ class KONWXML:
         if lte is None:
             return tag_to_remove
         # usuwa znacznik
-        elem = root.find(f'.//p[.="{taglist}"]')
-        parent = root.find(f'.//p[.="{taglist}"]/..')
+        elem = root.find(f'.//{p_tag}[.="{taglist}"]')
+        parent = root.find(f'.//{p_tag}[.="{taglist}"]/..')
         parent.remove(elem)
 
         # teraz szuka table o właściwym numerz
-        tablepar = root.findall(f".//{cls.TABLE_TAG}")[notable]
+        tablepar = root.findall(f".//{table_tag}")[notable]
         tag_to_remove.append(tablepar)
         # tutaj ./, tylko direct children
-        trlist = tablepar.findall(f"./{cls.TR_TAG}")
+        trlist = tablepar.findall(f"./{tr_tag}")
         # rozpoznanie, który element jest iterowalny
         tr = trlist[0] if len(trlist) == 1 else trlist[1]
         insert = -1 if len(trlist) <= 2 else 1
@@ -118,9 +128,8 @@ class KONWXML:
         it = iter(lista) if insert == -1 else reversed(lista)
         for e in it:
             trc = deepcopy(tr)
-            # _replace_text(trc, e)
             # tutaj rekurencyjnie podmnieniaj zawartość tabeli
-            cls.replace_all(trc, d | e, e, htmllista, htmlkeypairing)
+            cls.replace_all(trc, d | e, e, htmllista, htmlkeypairing, ns=ns)
             if insert == -1:
                 tablepar.append(trc)
             else:

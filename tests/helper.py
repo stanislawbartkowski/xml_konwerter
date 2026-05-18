@@ -51,3 +51,9 @@ class FAKTURA(KONWXML):
 
 class FAKTURABEZ(FAKTURA):
     REMNOVE_TABLE_TAG = True
+
+
+class KSEF_FAKTURA(KONWXML):
+    TABLE_TAG = "fakturalinie"
+    TR_TAG = "FaWiersz"
+    REMNOVE_TABLE_TAG = True

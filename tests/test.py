@@ -1,5 +1,5 @@
 import pytest
-from helper import FAKTURA, FAKTURABEZ, konwertuj_dok
+from helper import FAKTURA, FAKTURABEZ, KSEF_FAKTURA, konwertuj_dok
 
 from xml_konwerter import KONWXML
 
@@ -20,6 +20,7 @@ class TestKonwerter:
     PRZYKLAD_LINIE_NAGL_PODL = "test_linie_nagl_podl.xml"
     PRZYKLAD_LINIE2 = "test_linie2_nagl.xml"
     PRZYKLAD_LINIE_NESTED = "test_linie2_nested.xml"
+    PRZYKLAD_FAKTURA_LINIE = "FA_3_Przykład_9_pattern_linie.xml"
 
     HTML_LINIE = ""
     HTML_LINIE1 = "1"
@@ -125,7 +126,8 @@ class TestKonwerter:
 
     @PARAMS
     def test_zamien_linie_naglowek(self, zamien, KO, table, tr, expect_table):
-        self._test_zamien_linie_naglowek(self.PRZYKLAD_LINIE_NAGL, zamien, KO, table, tr, expect_table)
+        self._test_zamien_linie_naglowek(
+            self.PRZYKLAD_LINIE_NAGL, zamien, KO, table, tr, expect_table)
 
     @PARAMS
     def test_zamien_linie_naglowek_podglowek(self, zamien, KO, table, tr, expect_table):
@@ -134,7 +136,8 @@ class TestKonwerter:
 
     @PARAMS
     def test_zamien_linie2(self, zamien, KO, table, tr, expect_table):
-        self._test_zamien_linie_naglowek(self.PRZYKLAD_LINIE2, zamien, KO, table, tr, expect_table)
+        self._test_zamien_linie_naglowek(
+            self.PRZYKLAD_LINIE2, zamien, KO, table, tr, expect_table)
 
     @PARAMS
     def test_zamien_linie2_linie2(self, zamien, KO, table, tr, expect_table):
@@ -181,3 +184,49 @@ class TestKonwerter:
         assert "OPISSUMA99 199" in xml
         assert (table in xml) == expect_table
         assert tr in xml
+
+    def test_konwertuj_faktura_linie(self):
+        xml_name = self.PRZYKLAD_FAKTURA_LINIE
+        d = {
+            "NIP": "NIP_SPRZEDAWCA_123",
+            "NIP_NABYWCA": "NABYWCA_999",
+            "DATA_WYSTAWIENIA": "2022-99-99",
+            "NUMER_FAKTURY": "NUMER-222/99/555",
+        }
+        linie = [
+            {
+                "NrWierszaFa": "1",
+                "UU_ID": "aaaa111133339990",
+                "P_7": "rata leasingowa za 01/2026",
+                "P_8A": "szt.",
+                "P_8B": "1",
+                "P_9A": "2000",
+                "P_11": "2000",
+                "P_12": "23",
+            },
+            {
+                "NrWierszaFa": "2",
+                "UU_ID": "aaaa111133339991",
+                "P_7": "pakiet ubezpieczeń za 01/2026",
+                "P_8A": "szt.",
+                "P_8B": "1",
+                "P_9A": "300",
+                "P_11": "300",
+                "P_12": "zw",
+            },
+        ]
+        d = {
+            "NIP": "NIP_SPRZEDAWCA_123",
+            "NIP_NABYWCA": "NABYWCA_999",
+            "DATA_WYSTAWIENIA": "2022-99-99",
+            "NUMER_FAKTURY": "NUMER-222/99/555",
+            self.KLUCZ_LINIA: linie
+        }
+        xml = konwertuj_dok(
+            xml_name, d,
+            html_linia=self.HTML_LINIE, k_lista=self.KLUCZ_LINIA,
+            KO=KSEF_FAKTURA,
+        )
+        print(xml)
+        assert "fakturalinie" not in xml
+        assert "FaWiersz" in xml
